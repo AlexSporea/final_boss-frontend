@@ -1,0 +1,29 @@
+<div class="content">
+    <div class="row">
+        <div class="col-sm-11 text-center">
+            <h5 class="card-category">Datos meteo</h5>
+            <h2 class="card-title">Clima</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-chart">
+                <div class="card-body">
+                    <div id="mapEs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Leaflet.js -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <!--JS para acceder a la api de Laravel-->
+    <script src="assets/js/accesoApiLaravel.js"></script>
+    <script>
+        accessApi('getMeteo', 3);
+    </script>
+</div>
