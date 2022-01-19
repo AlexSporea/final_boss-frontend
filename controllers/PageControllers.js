@@ -1,4 +1,5 @@
-// Al estar en views, no hace falta indicar la carpeta
+
+// Al estar en el directorio views, no hace falta indicar la carpeta
 const vistaPrincipal = (req, res) => {
     res.render('home')
 }

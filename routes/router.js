@@ -5,7 +5,7 @@ const {vistaPrincipal, vistaEventos,
 const router = express.Router()
 
 // Conectamos las request a los métodos del PageController
-router.get('/', vistaPrincipal)
+router.get('/home', vistaPrincipal)
 router.get('/eventos', vistaEventos)
 router.get('/adminEventos', vistaAdminEventos)
 router.get('/meteo', vistaMeteo)

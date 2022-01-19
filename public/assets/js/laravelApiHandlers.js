@@ -1,6 +1,11 @@
-// Obtenomos los datos con el método meteo() y se los pasamos showEventos()
-function accessApi(laravelApiMethod, option) {
-    fetch(`http://localhost/api/${laravelApiMethod}`)
+// Obtenomos los datos con el método meteo() y se los pasamos al método correspondiente
+function queryApi(laravelApiMethod, option) {
+    let requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      };
+      
+    fetch(`http://localhost/api/${laravelApiMethod}`, requestOptions)
     .then(response => response.json())
     .then(data => {
         if (option == 1) showEventos(data)
@@ -8,23 +13,24 @@ function accessApi(laravelApiMethod, option) {
         else showMeteo(data)
     })
     .catch(error => console.log(error));
-
 }
 
 function showEventos(dataJson) {
-
+    console.log("Chiling at showEventos with: ");
+    console.log(dataJson);
+    // Preparamos el canvas
     const ctx = document.getElementById('chart-eventos').getContext('2d');
     Chart.defaults.color = '#FFFFFF';
     
     // Creamos el gráfico
-    const myChart = new Chart(ctx, {
-        type:'bar',
-        data:{
-            labels:dataJson[0],
-            datasets:[{
-                label:'Tipo de evento',
-                data:dataJson[1],
-                backgroundColor:[
+    myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: dataJson[0],
+            datasets: [{
+                label: 'Tipo de evento',
+                data: dataJson[1],
+                backgroundColor: [
                     'rgb(217, 237, 146)',
                     'rgb(181, 228, 140)',
                     'rgb(153, 217, 140)',
@@ -35,46 +41,46 @@ function showEventos(dataJson) {
                     'rgb(26, 117, 159)',
                     'rbg(30, 96, 145)'
                 ],
-                borderWidth:1,
-                borderColor:'#777',
-                hoverBorderWidth:3,
-                hoverBorderColor:'#000'
+                borderWidth: 1,
+                borderColor: '#777',
+                hoverBorderWidth: 3,
+                hoverBorderColor: '#000'
             }]
         },
-        options:{
-            title:{
-                display:true,
-                text:'Logística - Eventos',
-                fontSize:25
+        options: {
+            title: {
+                display: true,
+                text: 'Logística - Eventos',
+                fontSize: 25
             },
-            legend:{
-                position:'left',
+            legend: {
+                position: 'left',
             },
-            scales:{
-                yAxis:{
+            scales: {
+                yAxis: {
                     beginAtZero: true,
                     max: dataJson[2] + 1
-                    
+
                 }
             }
         }
     });
 
+    console.log(myChart);
 }
 
 function showAdminEventos(dataJson) {
-    
     const ctx = document.getElementById('chart-adminEventos').getContext('2d');
     Chart.defaults.color = '#FFFFFF';
 
     // Creamos el gráfico
-    const myChart = new Chart(ctx, {
-        type:'pie',
-        data:{
-            labels:dataJson[0],
-            datasets:[{
-                data:dataJson[1],
-                backgroundColor:[
+    myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: dataJson[0],
+            datasets: [{
+                data: dataJson[1],
+                backgroundColor: [
                     'rgb(255, 173, 173)',
                     'rgb(255, 214, 165)',
                     'rgb(253, 255, 182)',
@@ -87,16 +93,17 @@ function showAdminEventos(dataJson) {
                     'rgb(212, 163, 115)',
                     'rgb(233, 196, 106)'
                 ],
-                borderWidth:1,
-                borderColor:'#777',
-                hoverBorderWidth:3,
-                hoverBorderColor:'#000'
+                borderWidth: 1,
+                borderColor: '#777',
+                hoverBorderWidth: 3,
+                hoverBorderColor: '#000'
             }]
         },
-        options:{
+        options: {
             maintainAspectRatio: false
         }
     });
+
 }
 
 function showMeteo(dataJson) {
@@ -110,7 +117,7 @@ function showMeteo(dataJson) {
     const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
     // Formato con el que obtendremos los mosaicos
     const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    const tiles = L.tileLayer(tileUrl, {attribution});
+    const tiles = L.tileLayer(tileUrl, { attribution });
     tiles.addTo(mymap);
 
     // Añadimos los popups
@@ -123,23 +130,24 @@ function showMeteo(dataJson) {
                 element.feels_like, element.humidity
             )
         ).openPopup();
-        
+
     });
-    
+
 }
 
+// Añade el html dentro de los popouts del mapa
 function popoutContent(name, weather, desc, temp, feels, humidity) {
     let content;
     let date = new Date();
     let infoFecha = {
-        mes: date.toLocaleString("default", {month: "short"}),
+        mes: date.toLocaleString("default", { month: "short" }),
         dia: date.getDate(),
         hora: date.toLocaleString("es", {
             hour: "2-digit",
             minute: "2-digit",
         })
     };
-    content = 
+    content =
         '<div>' +
         `<p style = "color:red">${infoFecha.dia} ${infoFecha.mes}, ${infoFecha.hora}</p>` +
         `<h3 style = "color:black">${name}<h3>` +
@@ -147,7 +155,7 @@ function popoutContent(name, weather, desc, temp, feels, humidity) {
         `<p style = "color:black">Se sienten como ${feels}ºC</p>` +
         `<p style = "color:black">${weather}, ${desc}</p>` +
         `<p style = "color:black">Humedad: ${humidity}%</p>`
-        '</div>';
+    '</div>';
 
     return content;
 }
